@@ -9,6 +9,7 @@ import Router from "koa-router";
 import session from "koa-session";
 import * as handlers from "./handlers/index";
 import { receiveWebhook } from "@shopify/koa-shopify-webhooks";
+const path = require('path');
 
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8081;
@@ -17,7 +18,7 @@ const app = next({
   dev
 });
 const handle = app.getRequestHandler();
-const { SHOPIFY_API_SECRET, SHOPIFY_API_KEY, SCOPES } = process.env;
+const { SHOPIFY_API_SECRET, SHOPIFY_API_KEY, SCOPES, SLACK_CLIENT_ID, SLACK_CLIENT_SECRET } = process.env;
 app.prepare().then(() => {
   const server = new Koa();
   const router = new Router();
@@ -71,6 +72,32 @@ app.prepare().then(() => {
     // const toJasonFormat = JSON.stringify(ctx.state.webhook)
     const payloadID = ctx.state.webhook["payload"]["id"];
     console.log('received ID ', payloadID);
+  });
+
+  router.get('/install', ctx => {
+    // If no temporary code, access denied
+    if (!ctx.query.code) {
+      return;
+    }
+    const data = {
+      form: {
+        client_id: SLACK_CLIENT_ID,
+        client_secret: SLACK_CLIENT_SECRET,
+        code: ctx.query.code
+      }
+    };
+    router.post('https://slack.com/api/oauth2.v2.access', data, async ctx => {
+      if (ctx.status == 200) {
+        // Success with no error
+        const oauthToken = await JSON.parse(ctx.body).accessToken;
+        // OAuth Token Gotcha - redirect user to wherever
+        // Redirect to where ?
+        ctx.redirect();
+      }
+      else{
+        ctx.throw(401, "Unauthorized");
+      }
+    })
   });
 
   router.get("(.*)", verifyRequest(), async ctx => {
