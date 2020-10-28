@@ -9,7 +9,6 @@ import Router from "koa-router";
 import session from "koa-session";
 import * as handlers from "./handlers/index";
 import { receiveWebhook } from "@shopify/koa-shopify-webhooks";
-const path = require('path');
 
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8081;
