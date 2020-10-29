@@ -10,6 +10,8 @@ import session from "koa-session";
 import * as handlers from "./handlers/index";
 import { receiveWebhook } from "@shopify/koa-shopify-webhooks";
 
+const queryString = require('query-string');
+
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8081;
 const dev = process.env.NODE_ENV !== "production";
@@ -78,20 +80,19 @@ app.prepare().then(() => {
     if (!ctx.query.code) {
       return;
     }
-    const data = {
-      form: {
+    const params = {
         client_id: SLACK_CLIENT_ID,
         client_secret: SLACK_CLIENT_SECRET,
         code: ctx.query.code
-      }
     };
-    router.post('https://slack.com/api/oauth2.v2.access', data, async ctx => {
+    const stringified = queryString.stringify(params);
+    router.post(`https://slack.com/api/oauth2.v2.access${stringified}`, async ctx => {
       if (ctx.status == 200) {
         // Success with no error
-        const oauthToken = await JSON.parse(ctx.body).accessToken;
+        const oauthToken = await JSON.parse(ctx.body.accessToken);
         // OAuth Token Gotcha - redirect user to wherever
         // Redirect to where ?
-        ctx.redirect();
+        ctx.redirect('/');
       }
       else{
         ctx.throw(401, "Unauthorized");
