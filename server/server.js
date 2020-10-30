@@ -86,7 +86,7 @@ app.prepare().then(() => {
         code: ctx.query.code
     };
     const stringified = queryString.stringify(params);
-    router.post(`https://slack.com/api/oauth2.v2.access${stringified}`, async ctx => {
+    router.post(`https://slack.com/api/oauth2.v2.access/?${stringified}`, async ctx => {
       if (ctx.status == 200) {
         // Success with no error
         const oauthToken = await JSON.parse(ctx.body.accessToken);
