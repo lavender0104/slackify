@@ -74,7 +74,7 @@ app.prepare().then(() => {
     const payloadID = ctx.state.webhook["payload"]["id"];
     console.log('received ID ', payloadID);
   });
-
+/*
   router.get('/install', ctx => {
     // If no temporary code, access denied
     if (!ctx.query.code) {
@@ -99,7 +99,7 @@ app.prepare().then(() => {
       }
     })
   });
-
+*/
   router.get("(.*)", verifyRequest(), async ctx => {
     await handle(ctx.req, ctx.res);
     ctx.respond = false;
