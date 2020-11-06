@@ -8,7 +8,8 @@ export default async function (req, res) {
         res.end('Error 404 Page Not Found')
         return
     }
-    const { SLACK_CLIENT_ID, SLACK_CLIENT_SECRET } = process.env
+    const SLACK_CLIENT_ID = process.env.SLACK_CLIENT_ID
+    const SLACK_CLIENT_SECRET = process.env.SLACK_CLIENT_SECRET
     const params = {
         client_id: SLACK_CLIENT_ID,
         client_secret: SLACK_CLIENT_SECRET,
