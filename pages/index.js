@@ -31,7 +31,10 @@ function AccountConnectionExample() {
       title="Connect"
       action={{
         content: buttonText,
-        url: ["https://slack.com/oauth/v2/authorize?scope=incoming-webhook&client_id=408772672325.1409638062519"],
+        //1449688526773.1465409992321 me and Jayden ws
+        //408772672325.1409638062519  mk ws
+        //1443114823669.1482718082466 buang ws
+        url: ["https://slack.com/oauth/v2/authorize?scope=incoming-webhook&client_id=1449688526773.1465409992321"],
         external: true
       }}
       details={details}

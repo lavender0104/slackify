@@ -19,7 +19,8 @@ const app = next({
   dev
 });
 const handle = app.getRequestHandler();
-const { SHOPIFY_API_SECRET, SHOPIFY_API_KEY, SCOPES, SLACK_CLIENT_ID, SLACK_CLIENT_SECRET } = process.env;
+const { SHOPIFY_API_SECRET, SHOPIFY_API_KEY, SCOPES } = process.env;
+//, SLACK_CLIENT_ID, SLACK_CLIENT_SECRET 
 app.prepare().then(() => {
   const server = new Koa();
   const router = new Router();
